@@ -1,0 +1,124 @@
+{
+    "reviews": [
+      {
+        "professor": "Dr. Emily Chen",
+        "subject": "Physics",
+        "stars": 4,
+        "review": "Dr. Chen explains complex concepts clearly. Her enthusiasm for physics is contagious!"
+      },
+      {
+        "professor": "Prof. Michael Johnson",
+        "subject": "Literature",
+        "stars": 3,
+        "review": "Engaging lectures, but assignments can be vague. Office hours are helpful."
+      },
+      {
+        "professor": "Dr. Sarah Williams",
+        "subject": "Biology",
+        "stars": 5,
+        "review": "Fantastic instructor! Her lab sessions are incredibly informative and well-organized."
+      },
+      {
+        "professor": "Prof. David Lee",
+        "subject": "Mathematics",
+        "stars": 2,
+        "review": "Lectures move too quickly. More practice problems would be beneficial."
+      },
+      {
+        "professor": "Dr. Rachel Thompson",
+        "subject": "Psychology",
+        "stars": 4,
+        "review": "Thought-provoking discussions in class. Dr. Thompson is always open to questions."
+      },
+      {
+        "professor": "Prof. Robert Garcia",
+        "subject": "History",
+        "stars": 5,
+        "review": "Passionate about the subject. Makes historical events come alive in his lectures."
+      },
+      {
+        "professor": "Dr. Lisa Brown",
+        "subject": "Chemistry",
+        "stars": 3,
+        "review": "Knowledgeable, but can be intimidating. More approachable in one-on-one sessions."
+      },
+      {
+        "professor": "Prof. James Wilson",
+        "subject": "Economics",
+        "stars": 4,
+        "review": "Clear explanations of complex economic theories. Assignments are challenging but fair."
+      },
+      {
+        "professor": "Dr. Angela Martinez",
+        "subject": "Computer Science",
+        "stars": 5,
+        "review": "Excellent at breaking down difficult programming concepts. Always willing to help."
+      },
+      {
+        "professor": "Prof. Thomas Anderson",
+        "subject": "Philosophy",
+        "stars": 2,
+        "review": "Lectures can be dry. More interactive discussions would improve the class."
+      },
+      {
+        "professor": "Dr. Katherine White",
+        "subject": "Sociology",
+        "stars": 4,
+        "review": "Insightful lectures on social issues. Encourages critical thinking and debate."
+      },
+      {
+        "professor": "Prof. Daniel Kim",
+        "subject": "Art History",
+        "stars": 5,
+        "review": "Passionate and knowledgeable. Field trips to museums greatly enhance the learning experience."
+      },
+      {
+        "professor": "Dr. Jennifer Taylor",
+        "subject": "Environmental Science",
+        "stars": 3,
+        "review": "Interesting course material, but lectures can be disorganized at times."
+      },
+      {
+        "professor": "Prof. Christopher Davis",
+        "subject": "Political Science",
+        "stars": 4,
+        "review": "Balanced presentation of political ideologies. Encourages respectful debate in class."
+      },
+      {
+        "professor": "Dr. Olivia Parker",
+        "subject": "Neuroscience",
+        "stars": 5,
+        "review": "Brilliant researcher and teacher. Makes complex brain functions understandable."
+      },
+      {
+        "professor": "Prof. Andrew Miller",
+        "subject": "Business Administration",
+        "stars": 3,
+        "review": "Good real-world examples, but could improve on providing feedback on assignments."
+      },
+      {
+        "professor": "Dr. Sophia Lee",
+        "subject": "Linguistics",
+        "stars": 4,
+        "review": "Fascinating course content. Dr. Lee's enthusiasm for languages is infectious."
+      },
+      {
+        "professor": "Prof. Richard Clark",
+        "subject": "Engineering",
+        "stars": 2,
+        "review": "Knowledgeable, but struggles to explain concepts clearly. More hands-on projects needed."
+      },
+      {
+        "professor": "Dr. Natalie Wright",
+        "subject": "Anthropology",
+        "stars": 5,
+        "review": "Exceptional teacher. Field work opportunities greatly enhance the learning experience."
+      },
+      {
+        "professor": "Prof. Kevin Zhang",
+        "subject": "Statistics",
+        "stars": 3,
+        "review": "Solid grasp of the subject, but could improve on making the material more engaging."
+      }
+    ]
+  }
