@@ -1,14 +1,23 @@
-import React from 'react';
+'use client'
+import { useEffect, useState } from 'react';
 import { Box, Button, Grid, TextField, Typography, Stack } from "@mui/material";
 import Chat from './Chat'; // Import the Chat component
+import UniSearch from './UniSearch';
 
 export default function Dashboard() {
+  
   return (
     <Box sx={{ padding: 2 }}>
       <Grid container >
         {/* Left Side */}
         <Grid item xs={12} md={5}>
           <Stack spacing={3}>
+
+            {/* School Selection Section */}
+            <Box border="1px solid #ddd" borderRadius={2} p={2}>
+              <Typography variant="h6" gutterBottom>Select Your University</Typography>
+              <UniSearch />
+            </Box>
 
             {/* Submit Professor Rating URL Section */}
             <Box border="1px solid #ddd" borderRadius={2} p={2}>
