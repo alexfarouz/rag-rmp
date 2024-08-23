@@ -15,7 +15,7 @@ export default function Dashboard() {
 
             {/* School Selection Section */}
             <Box border="1px solid #ddd" borderRadius={2} p={2}>
-              <Typography variant="h6" gutterBottom>Select Your University</Typography>
+              <Typography variant="h6" gutterBottom>Select Your University and Department</Typography>
               <UniSearch />
             </Box>
 

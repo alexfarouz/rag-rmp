@@ -11,6 +11,7 @@ export default function UniSearch() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedUniversity, setSelectedUniversity] = useState('');
+  const [department, setDepartment] = useState('');
 
   // Load universities from the JSON file
   useEffect(() => {
@@ -22,6 +23,10 @@ export default function UniSearch() {
     setShowDropdown(true);
   };
 
+  const handleDepartmentChange = (event) => {
+    setDepartment(event.target.value); // Update the department state
+  };
+  
   // Memoize the filtered results to avoid unnecessary recomputation
   const filteredUniversities = useMemo(() => {
     const normalizedSearchTerm = searchTerm.trim().toLowerCase();
@@ -43,13 +48,36 @@ export default function UniSearch() {
   const saveUniversityToFirebase = async () => {
     if (selectedUniversity && user) {
       try {
+        // Save university to Firebase
         await setDoc(doc(db, 'users', user.id), { 
           university: selectedUniversity,
+          department: department
         }, { merge: true });
-        alert('University saved successfully!');
+        
+        // Send request to the backend to process the professors
+        const response = await fetch('http://localhost:5000/process_professors', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            school: selectedUniversity,
+            department: department
+          }),
+        });
+
+        const result = await response.json();
+        console.log(result)
+
+        if (response.ok) {
+          alert('University, department, and professors processed successfully!');
+        } else {
+          alert('Error processing professors: ' + result.error);
+        }
+
       } catch (error) {
-        console.error('Error saving university to Firestore:', error);
-        alert('Failed to save university. Please try again.');
+        console.error('Error saving university to Firestore or processing professors:', error);
+        alert('Failed to save university or process professors. Please try again.');
       }
     }
   };
@@ -93,22 +121,32 @@ export default function UniSearch() {
           ))}
         </ul>
       )}
-        <Button
-            variant="contained"
-            sx={{
-                backgroundColor: '#000',
-                color: '#fff',
-                padding: '8px 16px',
-                borderRadius: '8px',
-                textTransform: 'none',
-                '&:hover': {
-                backgroundColor: '#333',
-                },
-            }}
-            className="mt-3"
-            >
-                Save University
-        </Button>
+      {/* New Department Input */}
+      <input
+        type="text"
+        value={department} // Ensure the input reflects the department state
+        onChange={handleDepartmentChange}
+        placeholder="Enter your department"
+        style={{ width: '100%', padding: '10px', marginTop: '10px', boxSizing: 'border-box' }}
+      />
+
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#000',
+          color: '#fff',
+          padding: '8px 16px',
+          borderRadius: '8px',
+          textTransform: 'none',
+          marginTop: '10px',
+          '&:hover': {
+            backgroundColor: '#333',
+          },
+        }}
+        onClick={saveUniversityToFirebase} // Ensure the button calls the save function
+      >
+        Save University and Department
+      </Button>
     </div>
   );
 }

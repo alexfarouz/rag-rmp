@@ -1,7 +1,3 @@
-from httpcore import TimeoutException
-import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -9,10 +5,14 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from time import sleep
 import math
+from httpcore import TimeoutException
+import requests
+from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
 
 # Load environment variables
@@ -37,11 +37,10 @@ caps["pageLoadStrategy"] = "normal"  # Wait for full page load
 caps["acceptInsecureCerts"] = True
 caps["goog:loggingPrefs"] = {"performance": "ALL"}  # Enable performance logging
 
-# Set path to chromedriver as per your configuration
-webdriver_service = Service('C:/Users/alexfarouz/Downloads/chromedriver-win64/chromedriver-win64/chromedriver.exe')
+# Initialize the ChromeDriver with WebDriver Manager
+webdriver_service = Service(ChromeDriverManager().install())
 
-# Choose Chrome Browser
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+driver = webdriver.Chrome(options=chrome_options, service=webdriver_service, keep_alive=True)
 
 def get_school_id(school_name):
     """
@@ -159,7 +158,7 @@ def scrape_professors_by_department(school_name, department_name):
         # Process all loaded professor cards
         for card in professor_cards:
             name = card.find("div", class_="CardName__StyledCardName-sc-1gyrgim-0").get_text(strip=True)
-        #    department = card.find("div", class_="CardSchool__Department-sc-19lmz2k-0").get_text(strip=True)
+            department = card.find("div", class_="CardSchool__Department-sc-19lmz2k-0").get_text(strip=True)
             rating = card.find("div", class_="CardNumRating__CardNumRatingNumber-sc-17t4b9u-2").get_text(strip=True)
             professor_url = BASE_URL + card["href"]
             num_ratings = card.find("div", class_="CardNumRating__CardNumRatingCount-sc-17t4b9u-3").get_text(strip=True)
@@ -169,7 +168,7 @@ def scrape_professors_by_department(school_name, department_name):
 
             professors.append({
                 "name": name,
-        #        "department": department, FOR STORING DEPARTMENT
+                "department": department, #FOR STORING DEPARTMENT
                 "rating": rating,
                 "ratings": num_ratings,
                 "would take again": would_take_again,
@@ -181,12 +180,13 @@ def scrape_professors_by_department(school_name, department_name):
     except TimeoutException as e:
         print(f"TimeoutException: {e}")
         print("Could not find the element within the specified timeout period.")
-    
+        
+    driver.quit()
     return professors
 
 # Example usage:
-professors = scrape_professors_by_department("George Mason University", "Computer Science")
+'''professors = scrape_professors_by_department("George Mason University", "Computer Science")
 for prof in professors:
     print(prof)
+'''
 
-driver.quit()
