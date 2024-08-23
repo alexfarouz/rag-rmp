@@ -93,14 +93,22 @@ export default function UniSearch() {
           ))}
         </ul>
       )}
-      <Button
-        variant="contained"
-        sx={{ mt: 2 }}
-        onClick={saveUniversityToFirebase}
-        disabled={!selectedUniversity}
-      >
-        Save University
-      </Button>
+        <Button
+            variant="contained"
+            sx={{
+                backgroundColor: '#000',
+                color: '#fff',
+                padding: '8px 16px',
+                borderRadius: '8px',
+                textTransform: 'none',
+                '&:hover': {
+                backgroundColor: '#333',
+                },
+            }}
+            className="mt-3"
+            >
+                Save University
+        </Button>
     </div>
   );
 }
