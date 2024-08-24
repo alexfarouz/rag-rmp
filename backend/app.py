@@ -4,6 +4,9 @@ import logging
 import os
 from rmp_utils import scrape_professors_by_department
 from upload import upload_to_pinecone
+from pinecone import Pinecone
+from dotenv import load_dotenv
+import numpy as np
 
 # Set up basic configuration for logging
 logging.basicConfig(level=logging.DEBUG)
@@ -11,15 +14,43 @@ app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Adjust this for specific origins if needed
 
+load_dotenv(dotenv_path="../.env.local")
+pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
+index = pc.Index('rag-rmp')
+
 @app.route('/process_professors', methods=['POST'])
 def process_professors_endpoint():
     data = request.json
     school_name = data.get('school')
     department = data.get('department')
 
+
     if not school_name or not department:
         return jsonify({"error": "Missing information required"}), 400
-    
+
+    try:
+
+        # Create a dummy vector filled with zeros
+        dummy_vector = np.zeros(index.describe_index_stats()['dimension'])
+        query_response = index.query(
+            namespace=school_name,
+            vector=dummy_vector.tolist(),
+            top_k=1,
+            include_metadata=True,
+            filter={
+                "department": {"$eq": department}
+            },
+        )
+        print(query_response)
+
+        if query_response['matches']:
+            app.logger.info(f"Data for {school_name} - {department} already exists. Skipping scraping.")
+            return jsonify({"message": "Data already exists. Skipping scraping."}), 200
+
+    except Exception as e:
+        app.logger.error(f"Error querying Pinecone: {e}")
+        return jsonify({"error": "Error querying Pinecone"}), 500
+
     try:
         app.logger.info(f"Received request for school: {school_name} with filters: {department}")
         professors = scrape_professors_by_department(school_name, department) # Scrape professors from RMP

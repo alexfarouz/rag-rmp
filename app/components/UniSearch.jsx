@@ -83,13 +83,14 @@ export default function UniSearch() {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%' }}>
+    <div style={{ position: 'relative', width: '80%' }}>
       <input
         type="text"
         value={searchTerm} // Ensure the input reflects the search term state
         onChange={handleSearchChange}
         placeholder="Search and select university"
         style={{ width: '100%', padding: '10px', boxSizing: 'border-box' }}
+        className='rounded-lg'
       />
       {showDropdown && filteredUniversities.length > 0 && (
         <ul
@@ -126,8 +127,9 @@ export default function UniSearch() {
         type="text"
         value={department} // Ensure the input reflects the department state
         onChange={handleDepartmentChange}
-        placeholder="Enter your department"
+        placeholder="Select the department you're looking for"
         style={{ width: '100%', padding: '10px', marginTop: '10px', boxSizing: 'border-box' }}
+        className='rounded-lg'
       />
 
       <Button

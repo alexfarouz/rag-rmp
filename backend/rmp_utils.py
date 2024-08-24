@@ -12,11 +12,6 @@ import math
 from httpcore import TimeoutException
 import requests
 from bs4 import BeautifulSoup
-from dotenv import load_dotenv
-
-
-# Load environment variables
-load_dotenv(dotenv_path=".env.local")
 
 # Base URL for RateMyProfessor
 BASE_URL = "https://www.ratemyprofessors.com"

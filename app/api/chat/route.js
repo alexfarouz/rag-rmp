@@ -73,9 +73,9 @@ export async function POST(req){
     });
 
     const results = await index.query({
-    topK: 3,
-    includeMetadata: true,
-    vector: embedding.data[0].embedding,
+        topK: 3,
+        includeMetadata: true,
+        vector: embedding.data[0].embedding,
     });
 
     let resultString = '\n\nReturned results from vector db (done automatically): '

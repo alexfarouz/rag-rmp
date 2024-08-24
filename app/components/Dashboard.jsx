@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Grid, TextField, Typography, Stack } from "@mui/material";
 import Chat from './Chat'; // Import the Chat component
 import UniSearch from './UniSearch';
+import Filters from './Filters';
 
 export default function Dashboard() {
   
@@ -28,28 +29,8 @@ export default function Dashboard() {
               </Stack>
             </Box>
 
-            {/* Search for Professors Section */}
-            <Box border="1px solid #ddd" borderRadius={2} p={2}>
-              <Typography variant="h6" gutterBottom>Search for Professors</Typography>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <TextField fullWidth label="Subject" variant="outlined" />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField fullWidth label="Teaching Style" variant="outlined" />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField fullWidth label="Difficulty Level" variant="outlined" />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField fullWidth label="Grading Fairness" variant="outlined" />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField fullWidth label="Availability Outside Class" variant="outlined" />
-                </Grid>
-              </Grid>
-              <Button variant="contained" sx={{ mt: 2 }}>Search Professors</Button>
-            </Box>
+            {/* Import and Use Filters Component */}
+            <Filters />
 
             {/* Add Professor Rating Section */}
             <Box border="1px solid #ddd" borderRadius={2} p={2}>
