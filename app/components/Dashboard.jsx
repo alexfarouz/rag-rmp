@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react';
-import { Box, Button, Grid, TextField, Typography, Stack } from "@mui/material";
+import { Box, Grid, TextField, Typography, Stack } from "@mui/material";
+import { Button } from "@/components/ui/button";
+//import { TextField } from "@/components/ui/TextField"
 import Chat from './Chat'; // Import the Chat component
 import UniSearch from './UniSearch';
 import Filters from './Filters';
