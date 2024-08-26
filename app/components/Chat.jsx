@@ -1,56 +1,60 @@
 'use client'
 import { Box, Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
+import ReactMarkdown from 'react-markdown';
 
-export default function Home() {
+export default function Home({ selectedSchool, selectedDepartment }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
       content: "Hi! I'm the Rate My Professor support assistant. How can I help you today?",
     }
-  ])
+  ]);
 
-  const [message, setMessage] = useState('')
-  
+  const [message, setMessage] = useState('');
+
   const sendMessage = async () => {
-    setMessages((messages) => [ // Correctly updates the state using the previous state
+    setMessages((messages) => [
       ...messages,
-      { role: "user", content: message }, // Adds the user's message to the list
-      { role: "assistant", content: '' }, // Placeholder for the assistant's response
+      { role: "user", content: message },
+      { role: "assistant", content: '' },
     ]);
 
-    setMessage('') // Sets the initial system response to empty
-    const resposnse = fetch('/api/chat', { // Fetching from OpenAI API
+    setMessage(''); 
+    const response = fetch('/api/chat', { 
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify([...messages, {role: "user", content: message}]), // The user message passed to api
+      body: JSON.stringify({
+        messages: [...messages, { role: "user", content: message }],
+        school: selectedSchool,
+        department: selectedDepartment
+      }),
     }).then(async (res) => {
-      const reader = res.body.getReader()
-      const decoder = new TextDecoder()
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
 
-      let result = ''
-      return reader.read().then(function processText({done, value}){ // Process system text
-        if(done){
-          return result
+      let result = '';
+      return reader.read().then(function processText({ done, value }) {
+        if (done) {
+          return result;
         }
-        const text = decoder.decode(value || new Uint8Array(), {stream: true})
+        const text = decoder.decode(value || new Uint8Array(), { stream: true });
         setMessages((messages) => {
-          let lastMessage = messages[messages.length - 1]
-          let otherMessages = messages.slice(0, messages.length - 1)
+          let lastMessage = messages[messages.length - 1];
+          let otherMessages = messages.slice(0, messages.length - 1);
           return [
             ...otherMessages,
-            {...lastMessage, content: lastMessage.content + text},
-          ]
-        })
-        return reader.read().then(processText)
-      })
-    })
-  }
+            { ...lastMessage, content: lastMessage.content + text },
+          ];
+        });
+        return reader.read().then(processText);
+      });
+    });
+  };
 
   return (
-    
     <Box
       display="flex"
       flexDirection="column"
@@ -59,15 +63,17 @@ export default function Home() {
       className="pt-10"
     >
       <Stack direction="column"
-        width="500px"
+        width="100%"
+        maxWidth="1200px"
         height="700px"
-        border="1px solid black"
+        border="1px solid #ddd"
+        className="bg-[#fafcff]"
         p={2}
         spacing={3}
       >
-        <Stack direction="column" spacing={2} 
-          flexGrow={1} 
-          overflow={"auto"} 
+        <Stack direction="column" spacing={2}
+          flexGrow={1}
+          overflow={"auto"}
           maxHeight={'100%'}
         >
           {messages.map((message, index) => (
@@ -79,11 +85,17 @@ export default function Home() {
               }
             >
               <Box bgcolor={message.role === 'assistant' ? 'primary.main' : 'secondary.main'}
-                color = "white"
+                color="white"
                 borderRadius={16}
                 p={3}
+                width="fit-content"
+                maxWidth="100%"
               >
-                {message.content}
+                {message.role === 'assistant' ? (
+                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                ) : (
+                  message.content
+                )}
               </Box>
             </Box>
           ))}
@@ -91,9 +103,9 @@ export default function Home() {
         <Stack direction="row" spacing={2}>
           <TextField label="Message" fullWidth
             value={message}
-            onChange={(e)=>{
-              setMessage(e.target.value)
-            }} 
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
           />
           <Button variant="contained" onClick={sendMessage}>Send</Button>
         </Stack>
