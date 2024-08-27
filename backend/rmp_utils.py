@@ -123,7 +123,7 @@ def scrape_professors_by_department(school_name, department_name):
             print(f"Department '{department_name}' not found in the list.")
             return []
         
-
+        print("\n\nDept Selected\n\n")
         sleep(2)  # Small delay to ensure the page reloads with the filtered professors
         # Get the total number of professors in the department from the header
         total_professors_element = driver.find_element(By.CSS_SELECTOR, "h1[data-testid='pagination-header-main-results']")
@@ -145,7 +145,8 @@ def scrape_professors_by_department(school_name, department_name):
             except Exception as e:
                 print(f"Error clicking 'Show More' button: {e}")
                 break
-
+        
+        print("\n\nAll show mores completed.\n\n")
         # After loading all professors, parse the page source with BeautifulSoup
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         professor_cards = soup.find_all("a", class_="TeacherCard__StyledTeacherCard-syjs0d-0 dLJIlx")
@@ -166,7 +167,7 @@ def scrape_professors_by_department(school_name, department_name):
                 "department": department, #FOR STORING DEPARTMENT
                 "rating": rating,
                 "ratings": num_ratings,
-                "would take again": would_take_again,
+                "would-take-again": would_take_again,
                 "difficulty": difficulty,
                 "url": professor_url
             })
@@ -175,13 +176,94 @@ def scrape_professors_by_department(school_name, department_name):
     except TimeoutException as e:
         print(f"TimeoutException: {e}")
         print("Could not find the element within the specified timeout period.")
+
+    print("\nBase professor data stored successfully.\n")  
+
+    return get_professor_details(professors)
+
+def get_professor_details(professors):
+    """
+    Retrieves additional details for a professor from their RateMyProfessor page.
+    
+    :param professor: Dictionary containing professor's information
+    :return: Updated dictionary with courses offered and top reviews
+    """
+    profs = []
+    for professor in professors:
+        if professor['ratings'] == '0 ratings' or not professor['ratings']:
+            continue
+        driver.get(professor['url'])
+    
+        # Wait for the page to load
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "TeacherInfo__StyledTeacher-ti1fio-1"))
+        )
         
-    driver.quit()
-    return professors
+        # Get courses
+        courses = []
+        try:
+            dropdown = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "div.css-2b097c-container"))
+            )
+            dropdown.click()
+            course_elements = driver.find_elements(By.CSS_SELECTOR, "div.css-d0tfi8-menu")
+            course_lines = course_elements[0].text.split('\n')[1:]
+
+            # Iterate over each line and split by space to extract the course code
+            for line in course_lines:
+                course_code = line.split(' ')
+                if len(course_code) > 2:
+                    continue
+                courses.append(course_code[0])
+    
+        except Exception as e:
+            print(f"Error fetching courses for {professor['name']}: {e}")
+
+        # Get reviews
+        reviews = []
+        try:
+            review_elements = WebDriverWait(driver, 10).until(
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li .Rating__RatingBody-sc-1rhvpxz-0"))
+            )
+            for review in review_elements[:5]:  # Limit to top 5 reviews or fewer
+                soup = BeautifulSoup(review.get_attribute('innerHTML'), 'html.parser')
+                
+                # Extract course
+                course = soup.select_one('.RatingHeader__StyledClass-sc-1dlkqw1-3')
+                course = course.text.strip() if course else "N/A"
+                
+                # Extract date
+                date = soup.select_one('.TimeStamp__StyledTimeStamp-sc-9q2r30-0')
+                date = date.text.strip() if date else "N/A"
+                
+                # Extract quality rating
+                quality = soup.select_one('.CardNumRating__CardNumRatingNumber-sc-17t4b9u-2')
+                quality = quality.text.strip() if quality else "N/A"
+                
+                # Extract comment (if available)
+                comment = soup.select_one('.Comments__StyledComments-dzzyvm-0')
+                comment = comment.text.strip() if comment else "N/A"
+                
+                reviews.append({
+                    "course": course,
+                    "date": date,
+                    "quality": quality,
+                    "comment": comment
+                })
+        except Exception as e:
+            print(f"Error fetching reviews for {professor['name']}: {e}")
+        
+        # Update the professor dictionary with new information
+        professor['courses-offered'] = courses
+        professor['top-reviews'] = reviews
+        profs.append(professor)
+    print("\n\n\n\nFinished processing professors.\n\n\n\n")
+    return profs
+
+
 
 # Example usage:
 '''professors = scrape_professors_by_department("George Mason University", "Computer Science")
 for prof in professors:
     print(prof)
 '''
-
