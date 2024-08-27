@@ -29,8 +29,10 @@ def upload_to_pinecone(professors, school):
                 "url": prof["url"],
                 "rating": prof["rating"],
                 "ratings": prof["ratings"],
-                "would take again": prof["would take again"],
-                "difficulty": prof["difficulty"]
+                "would take again": prof["would-take-again"],
+                "difficulty": prof["difficulty"],
+                "courses-offered": prof["courses-offered"],
+                "top-reviews": prof["top-reviews"]
             }
         })
 
