@@ -1,24 +1,26 @@
 # 📚 RateMyProf
 
-Welcome to **RateMyProf**! This application allows users to easily find and sort information about professors at any university. Whether you're looking for feedback, ratings, or details about a specific professor, our chatbot has you covered. Simply sign in, access your personalized dashboard, and start asking away!
+Welcome to **RateMyProf**! This application is designed specifically for students to access detailed information about professors at various universities and to share their own reviews. Whether you're researching potential professors for your courses or sharing your experiences, RateMyProf is here to help!
 
 ## 🚀 Features
 
-- **🔐 User Dashboard:** After signing in, you'll be taken to a personalized dashboard where you can interact with our chatbot.
+- **🔐 User Dashboard:** After signing in, you'll be directed to your personalized dashboard where you can interact with our chatbot and manage your reviews.
 
-- **🤖 Chatbot with RAG:** The chatbot is powered by Retrieval-Augmented Generation (RAG), allowing it to answer any questions about professors from various universities accurately and efficiently.
+- **🤖 Chatbot with RAG:** Our intelligent chatbot, powered by Retrieval-Augmented Generation (RAG), provides accurate and up-to-date information about professors based on your questions and input.
 
-- **🔍 Professor Information:** Get detailed information about any professor by simply asking the chatbot or pasting a RateMyProf link directly.
+- **🔍 Professor Information:** Get detailed profiles and feedback about any professor by asking the chatbot or pasting a RateMyProf link directly.
 
-- **🔄 Sort and Filter:** Once you have the professor's details, you can sort and filter the results to find exactly what you need.
+- **✍️ Submit Reviews:** Share your experiences and rate professors to help other students make informed decisions.
+
+- **🔄 Sort and Filter:** Organize and sort the professor information and reviews according to your preferences for easy navigation.
 
 ## 🛠️ Technology Stack
 
-- **Next.js:** A React framework that enables server-side rendering and static web applications.
+- **Next.js:** A React framework that enables server-side rendering and static web applications for a smooth user experience.
 
-- **RAG (Retrieval-Augmented Generation):** Enhances the chatbot by providing it with relevant data from various sources, making it more knowledgeable and accurate.
+- **RAG (Retrieval-Augmented Generation):** Enhances the chatbot's capabilities by providing relevant data from multiple sources for accurate and comprehensive responses.
 
-## Getting Started
+## 🏁 Getting Started
 
 First, run the development server:
 
