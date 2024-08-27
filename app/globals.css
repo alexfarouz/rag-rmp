@@ -64,19 +64,20 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: linear-gradient(to right, #3b82f6, #9333ea); /* Matches the gradient background */
+  background: linear-gradient(to right, #1f2937, #111827); /* Dark gradient matching the background */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.6); /* Scrollbar thumb color */
+  background-color: rgba(75, 85, 99, 0.6); /* Dark gray scrollbar thumb color */
   border-radius: 10px; /* Rounded corners */
   border: 2px solid transparent; /* Add space around thumb */
   background-clip: content-box; /* Ensure thumb color doesn't bleed outside */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.8); /* Change color on hover */
+  background-color: rgba(156, 163, 175, 0.8); /* Lighter gray on hover for contrast */
 }
+
 
 @layer base {
   * {

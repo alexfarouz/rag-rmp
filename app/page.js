@@ -21,7 +21,7 @@ export default function Landing() {
         </div>
       </SignedIn>
       
-      <main className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex flex-col items-center justify-center text-white">
+      <main className="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center text-white">
         <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -56,36 +56,33 @@ export default function Landing() {
         </motion.div>
       </main>
 
-      <section id="features" className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-  <h2 className="text-4xl font-bold mb-8">Features</h2>
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl">
-    <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
-      <FaBookOpen className="text-4xl text-purple-200 mb-4" />
-      <h3 className="text-xl font-bold">Discover Professors</h3>
-      <p className="mt-2">Explore detailed profiles of professors from various universities.</p>
-    </div>
-    <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
-      <FaStar className="text-4xl text-yellow-200 mb-4" />
-      <h3 className="text-xl font-bold">Read and Write Reviews</h3>
-      <p className="mt-2">Share your experiences and read reviews from other students.</p>
-    </div>
-    <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
-      <FaFilter className="text-4xl text-green-200 mb-4" />
-      <h3 className="text-xl font-bold">Sort by Ratings</h3>
-      <p className="mt-2">Find the best professors by sorting based on student ratings.</p>
-    </div>
-    <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
-      <FaUniversity className="text-4xl text-blue-200 mb-4" />
-      <h3 className="text-xl font-bold">Filter by Department</h3>
-      <p className="mt-2">Narrow down your search by filtering professors by their department.</p>
-    </div>
-  </div>
-</section>
+      <section id="features" className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white">
+        <h2 className="text-4xl font-bold mb-8">Features</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl">
+          <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
+            <FaBookOpen className="text-4xl text-purple-200 mb-4" />
+            <h3 className="text-xl font-bold">Discover Professors</h3>
+            <p className="mt-2">Explore detailed profiles of professors from various universities.</p>
+          </div>
+          <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
+            <FaStar className="text-4xl text-yellow-200 mb-4" />
+            <h3 className="text-xl font-bold">Read and Write Reviews</h3>
+            <p className="mt-2">Share your experiences and read reviews from other students.</p>
+          </div>
+          <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
+            <FaFilter className="text-4xl text-green-200 mb-4" />
+            <h3 className="text-xl font-bold">Sort by Ratings</h3>
+            <p className="mt-2">Find the best professors by sorting based on student ratings.</p>
+          </div>
+          <div className="p-6 bg-white/20 backdrop-blur-sm rounded-lg shadow-md text-center">
+            <FaUniversity className="text-4xl text-blue-200 mb-4" />
+            <h3 className="text-xl font-bold">Filter by Department</h3>
+            <p className="mt-2">Narrow down your search by filtering professors by their department.</p>
+          </div>
+        </div>
+      </section>
 
-
-
-
-      <footer className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-12">
+      <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-12">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p>© 2024 Rate My Prof. All rights reserved.</p>
         </div>
