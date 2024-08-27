@@ -1,6 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📚 RateMyProf
 
-## Getting Started
+Welcome to **RateMyProf**! This application is designed specifically for students to access detailed information about professors at various universities and to share their own reviews. Whether you're researching potential professors for your courses or sharing your experiences, RateMyProf is here to help!
+
+## 🚀 Features
+
+- **🔐 User Dashboard:** After signing in, you'll be directed to your personalized dashboard where you can interact with our chatbot and manage your reviews.
+
+- **🤖 Chatbot with RAG:** Our intelligent chatbot, powered by Retrieval-Augmented Generation (RAG), provides accurate and up-to-date information about professors based on your questions and input.
+
+- **🔍 Professor Information:** Get detailed profiles and feedback about any professor by asking the chatbot or pasting a RateMyProf link directly.
+
+- **✍️ Submit Reviews:** Share your experiences and rate professors to help other students make informed decisions.
+
+- **🔄 Sort and Filter:** Organize and sort the professor information and reviews according to your preferences for easy navigation.
+
+## 🛠️ Technology Stack
+
+- **Next.js:** A React framework that enables server-side rendering and static web applications for a smooth user experience.
+
+- **RAG (Retrieval-Augmented Generation):** Enhances the chatbot's capabilities by providing relevant data from multiple sources for accurate and comprehensive responses.
+
+## 🏁 Getting Started
 
 First, run the development server:
 
