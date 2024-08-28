@@ -180,17 +180,18 @@ async def scrape_professors_by_department(school_name, department_name):
     finally:
         driver.quit()
 
+async def scrape_profs(school_name, department):
+    professors = await scrape_professors_by_department(school_name, department)
+    return professors
 
-async def main():
-    professors = await scrape_professors_by_department("George Mason University", "Computer Science")
-    for prof in professors:
+    '''for prof in professors:
         print(prof)
 
 if __name__ == "__main__":
     asyncio.run(main())
 
 # Example usage:
-'''professors = scrape_professors_by_department("George Mason University", "Computer Science")
+professors = scrape_professors_by_department("George Mason University", "Computer Science")
 for prof in professors:
     print(prof)
 '''
