@@ -44,7 +44,7 @@ export default function Dashboard() {
     <Box sx={{ padding: 2 }}>
       <Grid container spacing={2}>
         {/* Left Side */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={4} >
           <Stack spacing={3}>
 
             {/* School Selection Section */}
@@ -56,7 +56,7 @@ export default function Dashboard() {
             {/* Import and Use Filters Component */}
             <Filters />
 
-            {/* Add Professor Rating Section */}
+            {/* Add Professor Rating Section 
             <Box border="1px solid #ddd" borderRadius={2} p={2}>
               <Typography variant="h6" gutterBottom>Add Professor Rating</Typography>
               <Grid container spacing={2}>
@@ -101,7 +101,7 @@ export default function Dashboard() {
                 >
                     Submit Rating
                 </Button>
-            </Box>
+            </Box>*/}
           </Stack>
         </Grid>
 

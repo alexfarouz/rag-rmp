@@ -3,6 +3,7 @@ import { Box, Stack, TextField } from "@mui/material";
 import { Button } from "@/components/ui/button"
 import { useState } from "react";
 import ReactMarkdown from 'react-markdown';
+import { Input } from "@/components/ui/input";
 
 export default function Home({ selectedSchool, selectedDepartment }) {
   const [messages, setMessages] = useState([
@@ -67,8 +68,8 @@ export default function Home({ selectedSchool, selectedDepartment }) {
         width="100%"
         maxWidth="1200px"
         height="700px"
-        border="1px solid #ddd"
-        className="bg-[#fafcff]"
+        border="1px solid #aaa"
+        className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white rounded-xl"
         p={2}
         spacing={3}
       >
@@ -85,12 +86,17 @@ export default function Home({ selectedSchool, selectedDepartment }) {
                 message.role === 'assistant' ? 'flex-start' : 'flex-end'
               }
             >
-              <Box bgcolor={message.role === 'assistant' ? 'primary.main' : 'secondary.main'}
+              <Box
+                bgcolor={
+                  message.role === 'assistant'
+                    ? 'rgba(0, 0, 0, 0.6)' // Black with transparency
+                    : 'rgba(100, 100, 100, 0.6)' // Dark gray for user messages
+                }
                 color="white"
                 borderRadius={16}
                 p={3}
                 width="fit-content"
-                maxWidth="100%"
+                maxWidth="75%" // Limit the width to 75% of the container
               >
                 {message.role === 'assistant' ? (
                   <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -102,13 +108,13 @@ export default function Home({ selectedSchool, selectedDepartment }) {
           ))}
         </Stack>
         <Stack direction="row" spacing={2}>
-          <TextField label="Message" fullWidth
+          <Input label="Message" fullWidth
             value={message}
             onChange={(e) => {
               setMessage(e.target.value);
             }}
           />
-          <Button variant="contained" onClick={sendMessage}>Send</Button>
+          <Button variant="contained" onClick={sendMessage} className="bg-black">Send</Button>
         </Stack>
       </Stack>
     </Box>

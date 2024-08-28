@@ -28,7 +28,7 @@ export default function Landing() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h1 className="text-5xl font-bold mb-4">Welcome to Rate My Prof</h1>
+          <h1 className="text-5xl font-bold mb-4">Welcome to RecommendMyProfessor</h1>
           <p className="text-lg mb-8">
             Discover and review professors at your university. Get insights from
             fellow students, sort by ratings, and make informed decisions!
@@ -38,7 +38,7 @@ export default function Landing() {
               <Button
                 onClick={() => router.push('/dashboard')} // Redirect to dashboard
                 variant="solid"
-                className="bg-purple-500 hover:bg-purple-700 text-white px-6 py-3 rounded-full text-lg"
+                className="text-white bg-black hover:bg-[#333] text-lg rounded-lg"
               >
                 Go to Dashboard
               </Button>
@@ -47,7 +47,7 @@ export default function Landing() {
               <Button
                 onClick={handleSignIn}
                 variant="solid"
-                className="bg-purple-500 hover:bg-purple-700 text-white px-6 py-3 rounded-full text-lg"
+                className="text-white bg-black hover:bg-[#333] text-xl rounded-lg"
               >
                 Sign In
               </Button>
