@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import logging
 import os
-from rmp_utils import scrape_professors_by_department
+from rmp_utils import scrape_profs
 from upload import upload_to_pinecone
 from pinecone import Pinecone
 from dotenv import load_dotenv
 import numpy as np
+import asyncio
 
 # Set up basic configuration for logging
 logging.basicConfig(level=logging.DEBUG)
@@ -53,7 +54,7 @@ def process_professors_endpoint():
 
     try:
         app.logger.info(f"Received request for school: {school_name} with filters: {department}")
-        professors = scrape_professors_by_department(school_name, department) # Scrape professors from RMP
+        professors = asyncio.run(scrape_profs(school_name, department)) # Scrape professors from RMP
         
         upload_to_pinecone(professors, school_name) # Upload Professors to Pinecone
         app.logger.info(f"Processed professors for school: {school_name}")
