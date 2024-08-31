@@ -11,6 +11,7 @@ const Filters = () => {
     const [ratingRange, setRatingRange] = useState([1, 5]);
     const [course, setCourse] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
+    
 
     const tagOptions = [
       { value: 'easy-grader', label: 'Easy Grader' },
@@ -48,9 +49,9 @@ const Filters = () => {
                 <Grid item xs={12} md={6}>
                     <Input
                         value={course}
-                        onValueChange={handleCourseChange}
+                        onChange={(e) => handleCourseChange(e.target.value)}
                         placeholder="Course" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800"
                     />
                 </Grid>
 

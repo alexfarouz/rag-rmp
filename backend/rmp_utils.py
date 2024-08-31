@@ -8,8 +8,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from concurrent.futures import ThreadPoolExecutor
+from selenium.webdriver.common.action_chains import ActionChains
 import math
+import time
+from requests_html import AsyncHTMLSession
 
 BASE_URL = "https://www.ratemyprofessors.com"
 
@@ -21,7 +23,6 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--disable-extensions")
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--disable-popup-blocking")
-chrome_options.add_argument("--disable-images")
 
 # Initialize the ChromeDriver with WebDriver Manager
 webdriver_service = Service(ChromeDriverManager().install())
@@ -67,43 +68,42 @@ async def get_professor_details(session, professor, driver):
     if professor['ratings'] == '0 ratings' or not professor['ratings']:
         return None
 
-    loop = asyncio.get_event_loop()
+    driver.get(professor['url'])
     
-    # Run the Selenium operations in a thread pool
-    await loop.run_in_executor(None, driver.get, professor['url'])
-
+    WebDriverWait(driver, 2).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "TeacherInfo__StyledTeacher-ti1fio-1"))
+    )
+    
     courses = []
     try:
-        dropdown = WebDriverWait(driver, 10).until(
+        dropdown = WebDriverWait(driver, 2).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div.css-2b097c-container"))
         )
         dropdown.click()
         course_elements = driver.find_elements(By.CSS_SELECTOR, "div.css-d0tfi8-menu")
-        course_lines = course_elements[0].text.split('\n')[1:]
-
-        # Iterate over each line and split by space to extract the course code
-        for line in course_lines:
-            course_code = line.split(' ')
-            if len(course_code) > 2:
-                continue
-            courses.append(course_code[0])
+        if course_elements:
+            course_lines = course_elements[0].text.split('\n')[1:]
+            for line in course_lines:
+                course_code = line.split(' ')
+                if len(course_code) > 0:
+                    courses.append(course_code[0])
     except Exception as e:
         print(f"Error fetching courses for {professor['name']}: {e}")
     
-    # Format courses-offered as a comma-separated string
     professor['courses-offered'] = ', '.join(courses)
 
-    # Get reviews with bs4
-    html = await fetch(session, professor['url'])
-    soup = BeautifulSoup(html, 'html.parser')
     reviews = []
     try:
-        review_elements = soup.select("li .Rating__RatingBody-sc-1rhvpxz-0")
-        for i, review in enumerate(review_elements[:3], start=1):
-            course = review.select_one('.RatingHeader__StyledClass-sc-1dlkqw1-3')
-            date = review.select_one('.TimeStamp__StyledTimeStamp-sc-9q2r30-0')
-            quality = review.select_one('.CardNumRating__CardNumRatingNumber-sc-17t4b9u-2')
-            comment = review.select_one('.Comments__StyledComments-dzzyvm-0')
+        review_elements = WebDriverWait(driver, 2).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li .Rating__RatingBody-sc-1rhvpxz-0"))
+        )
+        for review in review_elements[:3]:
+            soup = BeautifulSoup(review.get_attribute('innerHTML'), 'html.parser')
+            
+            course = soup.select_one('.RatingHeader__StyledClass-sc-1dlkqw1-3')
+            date = soup.select_one('.TimeStamp__StyledTimeStamp-sc-9q2r30-0')
+            quality = soup.select_one('.CardNumRating__CardNumRatingNumber-sc-17t4b9u-2')
+            comment = soup.select_one('.Comments__StyledComments-dzzyvm-0')
 
             reviews.append(
                 f"course - {course.text.strip() if course else 'N/A'}, "
@@ -111,10 +111,9 @@ async def get_professor_details(session, professor, driver):
                 f"quality - {quality.text.strip() if quality else 'N/A'}, "
                 f"comment - {comment.text.strip() if comment else 'N/A'}"
             )
-            
     except Exception as e:
         print(f"Error fetching reviews for {professor['name']}: {e}")
-        
+
     professor['top-reviews'] = reviews
     return professor
 
@@ -127,12 +126,12 @@ async def scrape_professors_by_department(school_name, department_name):
         driver.get(url)
 
         try:
-            WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Close']"))).click()
+            WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Close']"))).click()
         except:
             pass
 
-        WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div.css-1wa3eu0-placeholder"))).click()
-        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.css-1u8e7rt-menu")))
+        WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "div.css-1wa3eu0-placeholder"))).click()
+        WebDriverWait(driver, 2).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.css-1u8e7rt-menu")))
 
         departments = driver.find_element(By.CSS_SELECTOR, "div.css-1u8e7rt-menu").text.split("\n")
         
@@ -147,32 +146,34 @@ async def scrape_professors_by_department(school_name, department_name):
             print(f"Department '{department_name}' not found in the list.")
             return []
 
-        await asyncio.sleep(2)
+        time.sleep(0.5)
 
         total_professors = int(driver.find_element(By.CSS_SELECTOR, "h1[data-testid='pagination-header-main-results']").text.split()[0])
         clicks_required = math.ceil(total_professors / 8)
+
+        for _ in range(clicks_required):
+            try:
+                show_more_button = WebDriverWait(driver, 2).until(
+                    EC.element_to_be_clickable((By.XPATH, "//button[text()='Show More']"))
+                )
+                ActionChains(driver).move_to_element(show_more_button).click().perform()
+                time.sleep(0.0625)
+            except:
+                break
+
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        professor_cards = soup.find_all("a", class_="TeacherCard__StyledTeacherCard-syjs0d-0 dLJIlx")
 
         async with aiohttp.ClientSession() as session:
             tasks = []
             processed_urls = set()
 
-            for _ in range(clicks_required):
-                soup = BeautifulSoup(driver.page_source, 'html.parser')
-                professor_cards = soup.find_all("a", class_="TeacherCard__StyledTeacherCard-syjs0d-0 dLJIlx")
-                
-                for card in professor_cards:
-                    professor = parse_professor_card(card)
-                    if professor['url'] not in processed_urls:
-                        processed_urls.add(professor['url'])
-                        task = asyncio.create_task(get_professor_details(session, professor, driver))
-                        tasks.append(task)
-
-                try:
-                    show_more_button = WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Show More']")))
-                    driver.execute_script("arguments[0].click();", show_more_button)
-                    await asyncio.sleep(0.25)
-                except:
-                    break
+            for card in professor_cards:
+                professor = parse_professor_card(card)
+                if professor['url'] not in processed_urls:
+                    processed_urls.add(professor['url'])
+                    task = asyncio.create_task(get_professor_details(session, professor, driver))
+                    tasks.append(task)
 
             detailed_professors = await asyncio.gather(*tasks)
 
@@ -184,14 +185,9 @@ async def scrape_profs(school_name, department):
     professors = await scrape_professors_by_department(school_name, department)
     return professors
 
-    '''for prof in professors:
-        print(prof)
-
 if __name__ == "__main__":
-    asyncio.run(main())
-
-# Example usage:
-professors = scrape_professors_by_department("George Mason University", "Computer Science")
-for prof in professors:
-    print(prof)
-'''
+    school_name = "George Mason University"
+    department = "Computer Science"
+    professors = asyncio.run(scrape_profs(school_name, department))
+    for prof in professors:
+        print(prof)

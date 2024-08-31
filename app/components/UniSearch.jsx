@@ -4,6 +4,7 @@ import { db } from '../../firebase'; // Import Firebase Firestore instance
 import { doc, setDoc } from 'firebase/firestore';
 import { useUser } from '@clerk/nextjs';
 import universitiesData from '../../universities.json'; // Import your JSON file
+import { Input } from '@/components/ui/input'
 
 export default function UniSearch() {
   const { user } = useUser(); // Use Clerk to get the current user
@@ -84,13 +85,12 @@ export default function UniSearch() {
 
   return (
     <div style={{ position: 'relative', width: '80%' }}>
-      <input
+      <Input
         type="text"
         value={searchTerm} // Ensure the input reflects the search term state
         onChange={handleSearchChange}
         placeholder="Search and select university"
-        style={{ width: '100%', padding: '10px', boxSizing: 'border-box' }}
-        className='rounded-lg'
+        className="w-full px-3 my-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 "
       />
       {showDropdown && filteredUniversities.length > 0 && (
         <ul
@@ -123,13 +123,12 @@ export default function UniSearch() {
         </ul>
       )}
       {/* New Department Input */}
-      <input
+      <Input
         type="text"
         value={department} // Ensure the input reflects the department state
         onChange={handleDepartmentChange}
         placeholder="Select the department you're looking for"
-        style={{ width: '100%', padding: '10px', marginTop: '10px', boxSizing: 'border-box' }}
-        className='rounded-lg'
+        className="w-full px-3 my-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-800 "
       />
 
       <Button
