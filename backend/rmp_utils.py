@@ -11,7 +11,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import math
 import time
-from requests_html import AsyncHTMLSession
 
 BASE_URL = "https://www.ratemyprofessors.com"
 

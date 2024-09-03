@@ -78,7 +78,6 @@
   background-color: rgba(156, 163, 175, 0.8); 
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -87,3 +86,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+.markdown-content p {
+  margin: 0 0 10px 0;
+  line-height: 1.5;
+}
+
+.markdown-content ul {
+  margin-left: 20px;
+  list-style-type: disc;
+  margin-bottom: 20px; /* Add margin at the bottom of the list */
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+  margin: 20px 0 10px 0; /* Top margin to separate from the previous content */
+  line-height: 1.25;
+}
+
+/* Specifically add space when a heading follows a list */
+.markdown-content ul + h1, .markdown-content ul + h2, .markdown-content ul + h3 {
+  margin-top: 30px; /* Add more top margin when heading follows a list */
+}
+

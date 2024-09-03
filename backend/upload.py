@@ -17,10 +17,14 @@ def upload_to_pinecone(professors, school):
 
     for prof in professors:
         response = client.embeddings.create(
-            input=prof,
+            input={ 
+                prof['name'], 
+                prof['courses-offered'],
+                #prof['department'],
+            },
             model="text-embedding-3-small",
         )
-        embedding=response.data[0].embedding
+        embedding = response.data[0].embedding
         processed_data.append({
             "values": embedding,
             "id": prof["name"],
@@ -35,6 +39,9 @@ def upload_to_pinecone(professors, school):
                 "top-reviews": prof["top-reviews"]
             }
         })
+    for prof in processed_data:
+        print(prof['id'])
+        print(prof['values'][:25])
 
     index = pc.Index('rag-rmp') # Get the index from pinecone
 

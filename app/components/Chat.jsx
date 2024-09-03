@@ -93,10 +93,11 @@ export default function Home({ selectedSchool, selectedDepartment }) {
                     : 'rgba(100, 100, 100, 0.6)' // Dark gray for user messages
                 }
                 color="white"
-                borderRadius={16}
+                borderRadius={6}
                 p={3}
                 width="fit-content"
                 maxWidth="75%" // Limit the width to 75% of the container
+                className="mr-3 markdown-content"
               >
                 {message.role === 'assistant' ? (
                   <ReactMarkdown>{message.content}</ReactMarkdown>
