@@ -55,8 +55,8 @@ export default function UniSearch() {
           department: department
         }, { merge: true });
         
-        // Send request to the backend to process the professors
-        const response = await fetch('http://localhost:5000/process_professors', {
+        // Send request to the backend to process the professors http://localhost:5000/process_professors
+        const response = await fetch('https://rag-rmp.onrender.com/process_professors', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

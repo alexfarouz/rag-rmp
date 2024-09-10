@@ -58,7 +58,7 @@ export default function Home() {
             </SignedOut>
             <SignedIn>
 
-                Hi {user?.fullName}, you're signed in!
+                Hi {user?.fullName}, you are signed in!
 
               <div className="flex justify-between items-center">
                 <UserButton afterSignOutUrl="/" />
