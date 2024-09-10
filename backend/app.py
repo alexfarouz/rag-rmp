@@ -13,7 +13,7 @@ import asyncio
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Adjust this for specific origins if needed
+CORS(app, resources={r"/*": {"origins": "https://rec-my-professors.vercel.app"}})  # Adjust this for specific origins if needed http://localhost:3000
 
 load_dotenv(dotenv_path="../.env.local")
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
