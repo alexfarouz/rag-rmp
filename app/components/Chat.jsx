@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react";
 import ReactMarkdown from 'react-markdown';
 import { Input } from "@/components/ui/input";
+import Filters from './Filters';
 
-export default function Home({ selectedSchool, selectedDepartment }) {
+export default function Home({ selectedSchool, selectedDepartment, filters }) {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -31,7 +32,8 @@ export default function Home({ selectedSchool, selectedDepartment }) {
       body: JSON.stringify({
         messages: [...messages, { role: "user", content: message }],
         school: selectedSchool,
-        department: selectedDepartment
+        department: selectedDepartment,
+        filters,
       }),
     }).then(async (res) => {
       const reader = res.body.getReader();

@@ -14,6 +14,7 @@ export default function Dashboard() {
   const { user } = useUser();
   const [selectedSchool, setSelectedSchool] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [filters, setFilters] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -39,6 +40,9 @@ export default function Dashboard() {
     fetchUserData();
   }, [user]);
   
+  const handleApplyFilters = (appliedFilters) => {
+    setFilters(appliedFilters);
+  };
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -54,7 +58,7 @@ export default function Dashboard() {
             </Box>
 
             {/* Import and Use Filters Component */}
-            <Filters />
+            <Filters onApplyFilters={handleApplyFilters} />
 
             {/* Add Professor Rating Section 
             <Box border="1px solid #ddd" borderRadius={2} p={2}>
@@ -116,7 +120,7 @@ export default function Dashboard() {
               <Button variant="contained" className="p-2 text-white bg-black hover:bg-[#333] text-sm">Submit Link</Button>
             </Stack>
           </Box>
-          <Chat selectedSchool={selectedSchool} selectedDepartment={selectedDepartment}/>
+          <Chat selectedSchool={selectedSchool} selectedDepartment={selectedDepartment} filters={filters}/>
         </Grid>
       </Grid>
     </Box>

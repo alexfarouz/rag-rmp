@@ -19,7 +19,7 @@ def upload_to_pinecone(professors, school):
         response = client.embeddings.create(
             input={ 
                 prof['name'], 
-                prof['courses-offered'],
+                ', '.join(prof['courses-offered']),
                 #prof['department'],
             },
             model="text-embedding-3-small",
@@ -33,6 +33,7 @@ def upload_to_pinecone(professors, school):
                 "url": prof["url"],
                 "rating": prof["rating"],
                 "ratings": prof["ratings"],
+                "top-tags": prof["top-tags"],
                 "would take again": prof["would-take-again"],
                 "difficulty": prof["difficulty"],
                 "courses-offered": prof["courses-offered"],

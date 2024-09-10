@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import TagSelector from './TagSelector';
 
-const Filters = () => {
+const Filters = ({ onApplyFilters }) => {
     const [difficultyRange, setDifficultyRange] = useState([1, 5]);
     const [ratingRange, setRatingRange] = useState([1, 5]);
     const [course, setCourse] = useState('');
@@ -19,6 +19,7 @@ const Filters = () => {
       { value: 'strict', label: 'Strict' },
       { value: 'attendance-mandatory', label: 'Attendance Mandatory' },
       { value: 'accessible', label: 'Accessible' }, 
+      { value: 'Group Projects', label: 'Group projects'},
       // Add more tags as necessary
     ];
 
@@ -40,6 +41,16 @@ const Filters = () => {
 
     const handleRemoveTag = (tagToRemove) => {
         setSelectedTags((tags) => tags.filter(tag => tag !== tagToRemove));
+    };
+
+    const handleApplyFilters = () => {
+        onApplyFilters({
+            difficultyRange,
+            ratingRange,
+            course,
+            selectedTags
+        });
+        console.log("filters applied");
     };
 
     return (
@@ -111,7 +122,7 @@ const Filters = () => {
 
                 <Grid item xs={12} className="flex items-center justify-end mt-4">
                     <Button
-                        href="#" 
+                        onClick={handleApplyFilters} 
                         className="text-white bg-black hover:bg-[#333] text-sm">
                         Apply
                     </Button>

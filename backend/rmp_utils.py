@@ -47,17 +47,24 @@ async def get_school_id(school_name):
 def parse_professor_card(card):
     name = card.find("div", class_="CardName__StyledCardName-sc-1gyrgim-0").get_text(strip=True)
     department = card.find("div", class_="CardSchool__Department-sc-19lmz2k-0").get_text(strip=True)
-    rating = card.find("div", class_="CardNumRating__CardNumRatingNumber-sc-17t4b9u-2").get_text(strip=True)
+    
+    rating_str = card.find("div", class_="CardNumRating__CardNumRatingNumber-sc-17t4b9u-2").get_text(strip=True)
+    rating = float(rating_str) if rating_str else 0 # Get rating float
+
     professor_url = BASE_URL + card["href"]
-    num_ratings = card.find("div", class_="CardNumRating__CardNumRatingCount-sc-17t4b9u-3").get_text(strip=True)
+
+    ratings_str = card.find("div", class_="CardNumRating__CardNumRatingCount-sc-17t4b9u-3").get_text(strip=True)
+    ratings = int(ratings_str.split()[0]) if ratings_str else 0 # Get number of ratings int 
+
     feedback_container = card.find("div", class_="CardFeedback__StyledCardFeedback-lq6nix-0 frciyA")
-    would_take_again, difficulty = [div.get_text(strip=True) for div in feedback_container.find_all("div", class_="CardFeedback__CardFeedbackNumber-lq6nix-2 hroXqf")]
+    would_take_again, difficulty_str = [div.get_text(strip=True) for div in feedback_container.find_all("div", class_="CardFeedback__CardFeedbackNumber-lq6nix-2 hroXqf")]
+    difficulty = float(difficulty_str) if difficulty_str else None # Get difficulty
 
     return {
         "name": name,
         "department": department,
         "rating": rating,
-        "ratings": num_ratings,
+        "ratings": ratings,
         "would-take-again": would_take_again,
         "difficulty": difficulty,
         "url": professor_url
@@ -68,7 +75,7 @@ async def get_professor_details(session, professor, driver):
         return None
 
     driver.get(professor['url'])
-    
+
     WebDriverWait(driver, 2).until(
         EC.presence_of_element_located((By.CLASS_NAME, "TeacherInfo__StyledTeacher-ti1fio-1"))
     )
@@ -84,12 +91,13 @@ async def get_professor_details(session, professor, driver):
             course_lines = course_elements[0].text.split('\n')[1:]
             for line in course_lines:
                 course_code = line.split(' ')
+                print('\n\n'+course_code[0])
                 if len(course_code) > 0:
                     courses.append(course_code[0])
     except Exception as e:
         print(f"Error fetching courses for {professor['name']}: {e}")
     
-    professor['courses-offered'] = ', '.join(courses)
+    professor['courses-offered'] = courses
 
     reviews = []
     try:
@@ -114,6 +122,22 @@ async def get_professor_details(session, professor, driver):
         print(f"Error fetching reviews for {professor['name']}: {e}")
 
     professor['top-reviews'] = reviews
+    
+    # Retrieve top tags from the professor's page
+    try:
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        tags_container = soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0")
+        
+        if tags_container:
+            tags = [tag.get_text(strip=True) for tag in tags_container.find_all("span", class_="Tag-bs9vf4-0")]
+            professor['top-tags'] = tags
+        else:
+            professor['top-tags'] = []
+    
+    except Exception as e:
+        print(f"Error fetching tags for {professor['name']}: {e}")
+        professor['top-tags'] = []
+    
     return professor
 
 async def scrape_professors_by_department(school_name, department_name):

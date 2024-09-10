@@ -15,6 +15,9 @@ const systemPrompt = `You are a knowledgeable and friendly assistant designed to
     Difficulty Level
     Student Satisfaction Rate
 
+    If the user provides filters for professors it will likely be through the filters tab which they can choose and select. Responses from Pinecone will be passed
+    based on these preferences. Use these specific filters when recommending professors.
+
     Guidelines:
 
     Engage in Conversation:
@@ -54,6 +57,7 @@ export async function POST(req){
 
     const selectedSchool = data.school;
     const selectedDepartment = data.department; // If needed in future queries
+    const filters = data.filters;
     const index = pc.index('rag-rmp').namespace(selectedSchool)
     const openai = new OpenAI()
     
@@ -65,10 +69,39 @@ export async function POST(req){
         encoding_format: 'float',
     });
 
+    let pineconeFilter = {department: selectedDepartment};
+
+    if (filters && filters.difficultyRange) {
+        pineconeFilter.difficulty = {
+            "$gte": filters.difficultyRange[0], // Minimum difficulty
+            "$lte": filters.difficultyRange[1], // Maximum difficulty
+        };
+    }
+
+    // Apply rating range filter if available
+    if (filters && filters.ratingRange) {
+        pineconeFilter.rating = {
+            "$gte": filters.ratingRange[0], // Minimum rating
+            "$lte": filters.ratingRange[1], // Maximum rating
+        };
+    }
+
+    // Apply course filter if provided
+    if (filters && filters.course) {
+        pineconeFilter['courses-offered'] = { "$in": [filters.course] };
+    }
+
+    // Apply tags filter if provided
+    if (filters && filters.selectedTags && filters.selectedTags.length > 0) {
+        pineconeFilter.tags = { "$in": filters.selectedTags };
+    }
+
+    console.log(pineconeFilter);
+    
     const results = await index.query({
         topK: 10,
         includeMetadata: true,
-        filter: { department: selectedDepartment},
+        filter: pineconeFilter,
         vector: embedding.data[0].embedding,
     });
 
@@ -101,7 +134,7 @@ export async function POST(req){
         `;
     });
 
-    console.log(resultString);
+    console.log(results);
 
     const lastMessage = text;
     const lastMessageContent = lastMessage
@@ -117,6 +150,7 @@ export async function POST(req){
             {role: 'system', content: resultString}
         ],
         model: 'gpt-4o-mini',
+        temperature: 0,
         stream: true
     })
 
